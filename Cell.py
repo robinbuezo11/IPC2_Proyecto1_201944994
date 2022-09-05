@@ -8,10 +8,10 @@ class Cell:
         return self.__status
 
     def getRow(self):
-        return self.__row()
+        return self.__row
 
     def getColumn(self):
-        return self.__column()
+        return self.__column
 
     def setStatus(self, status):
         self.__status = status

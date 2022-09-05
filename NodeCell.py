@@ -1,13 +1,13 @@
 from Cell import Cell
 
-class Node:
+class NodeCell:
     def __init__(self, next=None, cell=Cell()):
         self.__next = next
         self.__cell = cell
 
     def getNext(self):
         return self.__next
-
+    
     def getCell(self):
         return self.__cell
 
