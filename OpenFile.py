@@ -33,7 +33,3 @@ class OpenFile():
             return patients
         except Exception as e:
             print(e)
-
-op = OpenFile('XMLentrada.xml')
-patients = op.readFile()
-patients.printPatients()
