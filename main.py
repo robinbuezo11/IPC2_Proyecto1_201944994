@@ -29,6 +29,15 @@ def main():
             patients.printPatientsNames()
 
             patient = patients.searchForNum(int(input(Fore.YELLOW + '\nIngrese el número del paciente ')))
-            print(Fore.BLUE + f'\nUsted seleccionó al paciente {patient.getPatient().getName()}\n')
+            print(Fore.BLUE + f'\nPaciente: {patient.getPatient().getName()}\n')
+
+            patientoption = 0
+            while patientoption != 9:
+                print(Fore.BLUE + '------------------MENU------------------')
+                print(Fore.BLUE + '1) Valuar siguiente Periodo')
+                print(Fore.BLUE + '2) Valuar todos los periodos')
+                print(Fore.BLUE + '9) REGRESAR\n')
+
+                patientoption = int(input(Fore.YELLOW + 'Ingrese el numero de la opción que desee '))
 
 main()

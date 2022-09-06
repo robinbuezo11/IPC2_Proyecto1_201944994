@@ -4,6 +4,7 @@ from NodeCell import NodeCell
 class ListCells:
     def __init__(self):
         self.__first = NodeCell()
+        self.__magnitude = None
 
     def insert(self, cell=Cell()):
         if self.__first.getCell().getStatus() is None:
@@ -36,6 +37,7 @@ class ListCells:
             node = node.getNext()
         
     def setMatrixWithMagnitude(self, magnitude):
+        self.__magnitude = magnitude
         iter = 0
         row = 1
         column = 1
@@ -50,3 +52,24 @@ class ListCells:
             if row > magnitude:
                 return
             iter+=1
+
+    def ValueNextPeriod(self):
+        node = self.__first
+        while node:
+            nodeaux = self.__first
+            infectedcells = 0
+            while nodeaux:
+                if (nodeaux.getCell().getRow()==node.getCell().getRow()-1  or 
+                nodeaux.getCell().getRow()==node.getCell().getRow() or 
+                nodeaux.getCell().getRow()==node.getCell().getRow()+1) and (nodeaux.getCell().getColumn()==node.getCell().getColumn()-1 or 
+                nodeaux.getCell().getColumn()==node.getCell().getColumn() or 
+                nodeaux.getCell().getColumn()==node.getCell().getColumn()+1) and node != nodeaux and nodeaux.getCell().getStatus()==1:
+                    infectedcells += 1
+            
+                if node.getCell().getStatus() == 0 and infectedcells == 3:
+                    node.getCell().setStatus(1)
+                elif node.getCell().getStatus() == 1 and infectedcells != 2 and infectedcells != 3:
+                    node.getCell().setStatus(0)
+                
+                nodeaux = nodeaux.getNext()
+            node = node.getNext()
