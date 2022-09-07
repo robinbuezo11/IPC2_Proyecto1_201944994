@@ -1,5 +1,6 @@
 from Cell import Cell
 from NodeCell import NodeCell
+import os
 
 class ListCells:
     def __init__(self):
@@ -54,6 +55,7 @@ class ListCells:
             iter+=1
 
     def ValueNextPeriod(self):
+        newcells = ListCells()
         node = self.__first
         while node:
             nodeaux = self.__first
@@ -63,13 +65,53 @@ class ListCells:
                 nodeaux.getCell().getRow()==node.getCell().getRow() or 
                 nodeaux.getCell().getRow()==node.getCell().getRow()+1) and (nodeaux.getCell().getColumn()==node.getCell().getColumn()-1 or 
                 nodeaux.getCell().getColumn()==node.getCell().getColumn() or 
-                nodeaux.getCell().getColumn()==node.getCell().getColumn()+1) and node != nodeaux and nodeaux.getCell().getStatus()==1:
+                nodeaux.getCell().getColumn()==node.getCell().getColumn()+1) and not (node.getCell().getColumn() == nodeaux.getCell().getColumn()
+                and node.getCell().getRow() == nodeaux.getCell().getRow()) and nodeaux.getCell().getStatus()==1:
                     infectedcells += 1
-            
-                if node.getCell().getStatus() == 0 and infectedcells == 3:
-                    node.getCell().setStatus(1)
-                elif node.getCell().getStatus() == 1 and infectedcells != 2 and infectedcells != 3:
-                    node.getCell().setStatus(0)
                 
                 nodeaux = nodeaux.getNext()
+            
+            if node.getCell().getStatus() == 0 and infectedcells == 3:
+                newcells.insert(Cell(status=1,row=node.getCell().getRow(),column=node.getCell().getColumn()))
+                #node.getCell().setStatus(1)
+            elif node.getCell().getStatus() == 1 and infectedcells != 2 and infectedcells != 3:
+                newcells.insert(Cell(status=0,row=node.getCell().getRow(),column=node.getCell().getColumn()))
+                #node.getCell().setStatus(0)
+            else:
+                newcells.insert(node.getCell())
+            
             node = node.getNext()
+        return newcells
+
+    def graphMatrix(self):
+        node = self.__first
+
+        text = 'digraph { node[shape=box style=filled fillcolor="white"] l[label=<<TABLE cellpadding="20" style="dotted">'
+        while node:
+            if node.getNext() == None:
+                if node.getCell().getStatus() == 0:
+                    text += '<TD></TD></TR>'
+                else:
+                    text += '<TD  bgcolor="#1B76F5"></TD>'
+            elif node.getCell().getRow()==node.getNext().getCell().getRow() and node.getCell().getColumn() == 1:
+                if node.getCell().getStatus() == 0:
+                    text += '<TR><TD></TD>'
+                else:
+                    text += '<TR><TD  bgcolor="#1B76F5"></TD>'
+            elif node.getCell().getRow()==node.getNext().getCell().getRow() and node.getCell().getColumn() != 1:
+                if node.getCell().getStatus() == 0:
+                    text += '<TD></TD>'
+                else:
+                    text += '<TD  bgcolor="#1B76F5"></TD>'
+            else:
+                if node.getCell().getStatus() == 0:
+                    text += '<TD></TD></TR>'
+                else:
+                    text += '<TD  bgcolor="#1B76F5"></TD></TR>'
+            node = node.getNext()
+            
+        text += '</TABLE>>];}'
+        file = open("./matriz.dot", "w+")
+        file.write(text)
+        file.close()
+        os.system('dot -Tpng matriz.dot -o matriz.png') 
