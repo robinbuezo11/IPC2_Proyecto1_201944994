@@ -44,7 +44,7 @@
             <edad>50</edad>
         </datospersonales>
         <periodos>15</periodos>
-        <m>15</m>
+        <m>20</m>
         <rejilla>
             <celda f="1" c="10" />
             <celda f="2" c="11" />

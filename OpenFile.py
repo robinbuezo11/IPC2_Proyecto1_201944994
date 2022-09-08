@@ -1,3 +1,4 @@
+from colorama import Fore
 import xml.etree.ElementTree as et
 from Cell import Cell
 from ListCells import ListCells
@@ -25,8 +26,17 @@ class OpenFile():
                         elif item.tag == 'celda':
                             patient.getCells().updateCell(Cell(status=1, row=int(item.attrib['f']), column=int(item.attrib['c'])))
                     if data.tag == 'periodos':
+                        if int(data.text) > 10000:
+                            print(Fore.RED + 'La cantidad de periodos no puede ser mayor a 10,000')
+                            return None
                         patient.setPeriods(int(data.text))
                     if data.tag == 'm':
+                        if int(data.text) > 10000:
+                            print(Fore.RED + 'La matriz no puede ser mayor a 10,000')
+                            return None
+                        if (int(data.text) % 10) != 0:
+                            print(Fore.RED + 'La matriz debe ser multiplo de 10')
+                            return None
                         patient.setMatrix(int(data.text))
                         patient.getCells().setMatrixWithMagnitude(int(data.text))
                 patients.insert(patient=patient)

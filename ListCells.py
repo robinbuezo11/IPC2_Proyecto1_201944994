@@ -5,7 +5,6 @@ import os
 class ListCells:
     def __init__(self):
         self.__first = NodeCell()
-        self.__magnitude = None
 
     def insert(self, cell=Cell()):
         if self.__first.getCell().getStatus() is None:
@@ -83,7 +82,7 @@ class ListCells:
             node = node.getNext()
         return newcells
 
-    def graphMatrix(self):
+    def graphMatrix(self,period):
         node = self.__first
 
         text = 'digraph { node[shape=box style=filled fillcolor="white"] l[label=<<TABLE cellpadding="20" style="dotted">'
@@ -92,7 +91,7 @@ class ListCells:
                 if node.getCell().getStatus() == 0:
                     text += '<TD></TD></TR>'
                 else:
-                    text += '<TD  bgcolor="#1B76F5"></TD>'
+                    text += '<TD  bgcolor="#1B76F5"></TD></TR>'
             elif node.getCell().getRow()==node.getNext().getCell().getRow() and node.getCell().getColumn() == 1:
                 if node.getCell().getStatus() == 0:
                     text += '<TR><TD></TD>'
@@ -111,7 +110,23 @@ class ListCells:
             node = node.getNext()
             
         text += '</TABLE>>];}'
-        file = open("./matriz.dot", "w+")
+        file = open("./period.dot", "w+")
         file.write(text)
         file.close()
-        os.system('dot -Tpng matriz.dot -o matriz.png') 
+        os.system(f'dot -Tpng period.dot -o periodo{period}.png') 
+
+    def toString(self):
+        node = self.__first
+        text = ''
+        while node:
+            if node.getNext() == None:
+                #print(node.getCell().getStatus())
+                text += f'{node.getCell().getStatus()}\n'
+            elif node.getCell().getRow()==node.getNext().getCell().getRow():
+                #print(node.getCell().getStatus(),end='')
+                text += f'{node.getCell().getStatus()}'
+            else:
+                #print(node.getCell().getStatus())
+                text += f'{node.getCell().getStatus()}\n'
+            node = node.getNext()
+        return text

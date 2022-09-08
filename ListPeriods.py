@@ -1,4 +1,5 @@
 from colorama import Fore
+from Cell import Cell
 from ListCells import ListCells
 from NodePeriod import NodePeriod
 
@@ -30,4 +31,19 @@ class ListPeriods:
                     node = node.getNext()
                     iter += 1
             print(Fore.RED + 'Periodo no encontrado')
+
+    def searchInList(self,period=ListCells()):
+        if self.__first is None:
+            return None
+        else:
+            iter = 0
+            node=self.__first
+            while node:
+                if node.getPeriod().toString() == period.toString():
+                    return iter
+                else:
+                    node = node.getNext()
+                    iter += 1
+        #print(Fore.RED + 'Periodo no encontrado')
+        return None
 
