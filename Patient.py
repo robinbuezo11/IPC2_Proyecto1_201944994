@@ -77,11 +77,15 @@ class Patient:
         self.__result = result
 
     def ValueNextPeriod(self):
-        self.__listperiods.insert(self.__cells)
-        self.__period += 1
-        self.__cells = self.__cells.ValueNextPeriod()
-        self.study(self.__cells)
-        print(Fore.CYAN + f'Periodo evaluado: {self.__period}, N: {self.__n}, N1: {self.__n1},  Enfermedad: {self.__result}')
+        if self.__period < self.__periods:
+            self.__listperiods.insert(self.__cells)
+            self.__period += 1
+            self.__cells = self.__cells.ValueNextPeriod()
+            self.study(self.__cells)
+            print(Fore.CYAN + f'Periodo evaluado: {self.__period}, N: {self.__n}, N1: {self.__n1},  Enfermedad: {self.__result}')
+        else:
+            print(Fore.RED + 'Ya se cumplió el límite de periodos')
+            return False
 
     def study(self, cells):
         period = self.__listperiods.searchInList(cells)

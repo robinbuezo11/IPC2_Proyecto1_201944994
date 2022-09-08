@@ -42,4 +42,4 @@ class OpenFile():
                 patients.insert(patient=patient)
             return patients
         except Exception as e:
-            print(e)
+            print(Fore.RED + f'{e}')

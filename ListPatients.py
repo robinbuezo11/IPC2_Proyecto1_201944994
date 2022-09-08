@@ -45,7 +45,7 @@ class ListPatient:
     def searchForNum(self,num):
         if self.__first.getPatient().getName() is None:
             print(Fore.RED + 'No se tiene ningún paciente, debe cargar información')
-            return
+            return None
         else:
             iter = 1
             node=self.__first
@@ -56,6 +56,7 @@ class ListPatient:
                     node = node.getNext()
                     iter += 1
             print(Fore.RED + 'Paciente no encontrado')
+            return None
 
     def generateXML(self):
         data = ET.Element('pacientes')

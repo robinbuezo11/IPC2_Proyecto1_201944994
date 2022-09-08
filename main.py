@@ -1,3 +1,4 @@
+from cgitb import text
 from colorama import Fore
 from ListPatients import ListPatient
 from OpenFile import OpenFile
@@ -13,27 +14,37 @@ def main():
         print(Fore.BLUE + '9) SALIR\n')
         
         try:
-            option = int(input(Fore.YELLOW + "Ingrese el numero de la opción que desee "))
+            textin = input(Fore.YELLOW + "Ingrese el numero de la opción que desee ")
+            if textin != '':
+                option = int(textin)
+            else:
+                option = 0
         except Exception as e:
-            print(Fore.RED + e)
+            print(Fore.RED + f'{e}')
         
         if option == 1:
-            path = input(Fore.YELLOW + 'Ingrese la ruta del archivo ')
             try:
+                path = input(Fore.YELLOW + '\nIngrese la ruta del archivo ')
                 data =  OpenFile(path)
                 patients = data.readFile()
                 if patients != None:
                     print(Fore.GREEN + 'Archivo cargado exitosamente')
             except Exception as e:
-                print(Fore.RED + e)
+                print(Fore.RED + f'{e}')
         elif option == 2:
             print('')
             patients.printPatientsNames()
-
-            patient = patients.searchForNum(int(input(Fore.YELLOW + '\nIngrese el número del paciente ')))
-            print(Fore.BLUE + f'\nPaciente: {patient.getPatient().getName()}\n')
-
-            patientoption = 0
+            
+            text = ''
+            while text == '':
+                text = input(Fore.YELLOW + '\nIngrese el número del paciente ')
+            patient = patients.searchForNum(int(text))
+            if patient != None:
+                print(Fore.BLUE + f'\nPaciente: {patient.getPatient().getName()}')
+                patientoption = 0
+            else:
+                patientoption = 9
+            
             while patientoption != 9:
                 print(Fore.BLUE + '\n------------------MENU------------------')
                 print(Fore.BLUE + '1) Valuar siguiente Periodo')
@@ -42,36 +53,44 @@ def main():
                 print(Fore.BLUE + '9) REGRESAR\n')
 
                 try:
-                    patientoption = int(input(Fore.YELLOW + 'Ingrese el numero de la opción que desee '))
+                    textin = input(Fore.YELLOW + 'Ingrese el numero de la opción que desee ')
+                    if textin != '':
+                        patientoption = int(textin)
+                    else:
+                        patientoption = 0
                 except Exception as e:
-                    print(Fore.RED + e)
+                    print(Fore.RED + f'{e}')
 
                 if patientoption == 1:
                     try:
+                        patient.getPatient().getCells().graphMatrix(patient.getPatient().getPeriod())
                         patient.getPatient().ValueNextPeriod()
                         patient.getPatient().getCells().graphMatrix(patient.getPatient().getPeriod())
                     except Exception as e:
-                        print(Fore.RED + e)
+                        print(Fore.RED + f'{e}')
                 elif patientoption == 2:
                     try:
                         iterator = 1
-                        while iterator <= patient.getPatient().getPeriods() and patient.getPatient().getResult() == 'Leve':
-                            patient.getPatient().ValueNextPeriod()
+                        if patient.getPatient().getResult() == 'Leve':
                             patient.getPatient().getCells().graphMatrix(patient.getPatient().getPeriod())
-                            iterator += 1
+                            while iterator <= patient.getPatient().getPeriods() and patient.getPatient().getResult() == 'Leve' and patient.getPatient().ValueNextPeriod() != False:
+                                patient.getPatient().getCells().graphMatrix(patient.getPatient().getPeriod())
+                                iterator += 1
+                        else:
+                            print(Fore.CYAN + 'Ya se encontró un patrón repetido')
                     except Exception as e:
-                        print(Fore.RED + e)
+                        print(Fore.RED + f'{e}')
                 elif patientoption == 3:
                     try:
                         patient.getPatient().getCells().graphMatrix(patient.getPatient().getPeriod())
                     except Exception as e:
-                        print(Fore.RED + e)
+                        print(Fore.RED + f'{e}')
         elif option == 3:
             try:
                 patients.generateXML()
                 print(Fore.GREEN + 'XML generado exitosamente')
             except Exception as e:
-                print(Fore.RED + e)
+                print(Fore.RED + f'{e}')
 
 
 main()
